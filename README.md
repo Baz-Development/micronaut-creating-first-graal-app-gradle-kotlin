@@ -1,0 +1,2 @@
+# micronaut graalvm first project
+ 
