@@ -11,6 +11,7 @@ jobs:
           java-version: '17'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          native-image-job-reports: 'true'
       - name: Example step
         run: |
           echo "GRAALVM_HOME: $GRAALVM_HOME"
@@ -18,3 +19,16 @@ jobs:
           java --version
           gu --version
           native-image --version
+      - name: Build and run HelloWorld.java
+        run: |
+          echo 'public class HelloWorld { public static void main(String[] args) { System.out.println("Hello, World!"); } }' > HelloWorld.java
+          javac HelloWorld.java
+          native-image HelloWorld
+          ./helloworld
+      
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: helloworld-${{ matrix.os }}
+          path: helloworld*
+
